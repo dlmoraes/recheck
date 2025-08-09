@@ -10,7 +10,6 @@ defmodule Recheck.OfficesFixtures do
     Enum.into(attrs, %{
       name: valid_office_name()
     })
-    |> add_company_if_necessary()
   end
 
   def office_fixture(attrs \\ %{}) do
@@ -20,12 +19,5 @@ defmodule Recheck.OfficesFixtures do
       |> Recheck.Offices.create_office()
 
     office
-  end
-
-  def add_company_if_necessary(attrs, key \\ :company_id) when is_map(attrs) do
-    Map.put_new_lazy(attrs, key, fn ->
-      company = Recheck.CompaniesFixtures.company_fixture()
-      company.id
-    end)
   end
 end

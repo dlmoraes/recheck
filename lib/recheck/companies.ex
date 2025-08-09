@@ -29,4 +29,12 @@ defmodule Recheck.Companies do
   def list_unique_companies do
     Repo.all(from c in Company, select: c.name, distinct: true)
   end
+
+  @spec options_for_select() :: list()
+  def options_for_select do
+    list_companies()
+    |> Enum.map(fn company ->
+      {company.name, company.id}
+    end)
+  end
 end

@@ -3,6 +3,7 @@ defmodule RecheckWeb.UserRegistrationLive do
 
   alias Recheck.Accounts
   alias Recheck.Accounts.User
+  alias Recheck.Companies
   alias Recheck.Offices
 
   def render(assigns) do
@@ -34,6 +35,7 @@ defmodule RecheckWeb.UserRegistrationLive do
 
         <.input field={@form[:email]} type="email" label="Email" required />
         <.input field={@form[:password]} type="password" label="Password" required />
+        <.input field={@form[:company_id]} type="select" label="Company" options={@company_options} />
         <.input field={@form[:office_id]} type="select" label="Office" options={@office_options} />
 
         <:actions>
@@ -46,10 +48,12 @@ defmodule RecheckWeb.UserRegistrationLive do
 
   def mount(_params, _session, socket) do
     changeset = Accounts.change_user_registration(%User{})
+    company_options = Companies.options_for_select()
     office_options = Offices.options_for_select()
 
     socket =
       socket
+      |> assign(company_options: company_options)
       |> assign(office_options: office_options)
       |> assign(trigger_submit: false, check_errors: false)
       |> assign_form(changeset)

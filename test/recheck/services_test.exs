@@ -2,8 +2,6 @@ defmodule Recheck.ServicesTest do
   alias Recheck.ServicesFixtures
   use Recheck.DataCase
 
-  import Recheck.CompaniesFixtures
-
   alias Recheck.Services
   alias Recheck.Operations.Service
 
@@ -23,7 +21,6 @@ defmodule Recheck.ServicesTest do
       assert {:ok, %Service{} = service} = Services.create_service(attrs)
       assert service.name == attrs.name
       assert service.description == attrs.description
-      assert service.company_id == attrs.company_id
     end
 
     test "create_service/1 with invalid data returns error changeset" do
@@ -56,46 +53,12 @@ defmodule Recheck.ServicesTest do
       assert %{description: ["can't be blank"]} = errors_on(changeset)
     end
 
-    test "create_service/1 with requires company id" do
-      attrs =
-        ServicesFixtures.valid_service_attributes()
-        |> Map.put(:company_id, nil)
-
-      assert {:error, %Ecto.Changeset{} = changeset} =
-               Services.create_service(attrs)
-
-      assert changeset.valid? == false
-      assert Keyword.keys(changeset.errors) == [:company_id]
-      assert %{company_id: ["can't be blank"]} = errors_on(changeset)
-    end
-
-    test "create_service/1 with requires company id, name and description" do
-      assert {:error, %Ecto.Changeset{} = changeset} =
-               Services.create_service(%{
-                 name: nil,
-                 description: nil,
-                 company_id: nil
-               })
-
-      assert changeset.valid? == false
-      assert changeset.errors[:company_id]
-      assert changeset.errors[:name]
-      assert changeset.errors[:description]
-
-      assert %{
-               company_id: ["can't be blank"],
-               name: ["can't be blank"],
-               description: ["can't be blank"]
-             } = errors_on(changeset)
-    end
-
     test "update_service/2 with valid data updates the service" do
       service = ServicesFixtures.service_fixture()
       update_attrs = ServicesFixtures.valid_service_attributes()
       assert {:ok, %Service{} = service} = Services.update_service(service, update_attrs)
       assert service.name == update_attrs.name
       assert service.description == update_attrs.description
-      assert service.company_id == update_attrs.company_id
     end
 
     test "update_service/2 with invalid data returns error changeset" do
@@ -109,11 +72,6 @@ defmodule Recheck.ServicesTest do
       assert {:error, %Ecto.Changeset{}} =
                Services.update_service(service, %{
                  description: nil
-               })
-
-      assert {:error, %Ecto.Changeset{}} =
-               Services.update_service(service, %{
-                 company_id: nil
                })
     end
 

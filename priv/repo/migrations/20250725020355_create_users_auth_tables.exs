@@ -8,8 +8,9 @@ defmodule Recheck.Repo.Migrations.CreateUsersAuthTables do
       add :email, :citext, null: false
       add :hashed_password, :string, null: false
       add :confirmed_at, :utc_datetime
-      add :role, :string
-      add :office_id, references(:offices)
+      add :role, :string, default: "atendente", null: false
+      add :company_id, references(:companies, on_delete: :restrict), null: false
+      add :office_id, references(:offices, on_delete: :restrict), null: true
 
       timestamps(type: :utc_datetime)
     end

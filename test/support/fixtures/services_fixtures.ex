@@ -12,7 +12,6 @@ defmodule Recheck.ServicesFixtures do
       name: valid_service_name(),
       description: valid_service_description()
     })
-    |> add_company_if_necessary()
   end
 
   def service_fixture(attrs \\ %{}) do
@@ -22,12 +21,5 @@ defmodule Recheck.ServicesFixtures do
       |> Recheck.Services.create_service()
 
     service
-  end
-
-  def add_company_if_necessary(attrs, key \\ :company_id) when is_map(attrs) do
-    Map.put_new_lazy(attrs, key, fn ->
-      company = Recheck.CompaniesFixtures.company_fixture()
-      company.id
-    end)
   end
 end

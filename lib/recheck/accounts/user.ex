@@ -11,8 +11,9 @@ defmodule Recheck.Accounts.User do
     field :current_password, :string, virtual: true, redact: true
     field :confirmed_at, :utc_datetime
 
-    field :role, Ecto.Enum, values: @roles
+    field :role, Ecto.Enum, values: @roles, default: :atendente
 
+    belongs_to :company, Recheck.Accounts.Company
     belongs_to :office, Recheck.Accounts.Office
 
     timestamps(type: :utc_datetime)
@@ -43,9 +44,10 @@ defmodule Recheck.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password, :email, :role, :office_id])
+    |> cast(attrs, [:email, :password, :email, :role, :company_id, :office_id])
     |> validate_email(opts)
     |> validate_password(opts)
+    |> assoc_constraint(:company)
     |> assoc_constraint(:office)
   end
 

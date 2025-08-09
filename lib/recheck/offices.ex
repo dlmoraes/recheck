@@ -30,6 +30,7 @@ defmodule Recheck.Offices do
     Repo.all(from o in Office, select: o.name, distinct: true)
   end
 
+  @spec options_for_select() :: list()
   def options_for_select do
     list_offices()
     |> Enum.map(fn office ->

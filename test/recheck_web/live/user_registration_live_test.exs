@@ -1,6 +1,7 @@
 defmodule RecheckWeb.UserRegistrationLiveTest do
   use RecheckWeb.ConnCase, async: true
 
+  alias Recheck.CompaniesFixtures
   alias Recheck.OfficesFixtures
   import Phoenix.LiveViewTest
   import Recheck.AccountsFixtures
@@ -39,6 +40,7 @@ defmodule RecheckWeb.UserRegistrationLiveTest do
 
   describe "register user" do
     test "creates account and logs the user in", %{conn: conn} do
+      company = CompaniesFixtures.company_fixture()
       office = OfficesFixtures.office_fixture()
 
       {:ok, lv, _html} = live(conn, ~p"/users/register")
@@ -50,6 +52,7 @@ defmodule RecheckWeb.UserRegistrationLiveTest do
           user:
             valid_user_attributes(
               email: email,
+              company_id: company.id,
               office_id: office.id
             )
         )

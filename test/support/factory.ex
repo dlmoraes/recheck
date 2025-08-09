@@ -20,22 +20,21 @@ defmodule Recheck.Factory do
     %Accounts.User{
       email: sequence(:email, &"email-#{&1}@example.com"),
       hashed_password: "_",
+      company: build(:company),
       office: build(:office)
     }
   end
 
   def office_factory do
     %Office{
-      name: sequence(:name, &"office-#{&1}"),
-      company: build(:company)
+      name: sequence(:name, &"office-#{&1}")
     }
   end
 
   def service_factory do
     %Service{
       name: sequence(:name, &"service-#{&1}"),
-      description: sequence(:description, &"description-#{&1}"),
-      company: build(:company)
+      description: sequence(:description, &"description-#{&1}")
     }
   end
 end
